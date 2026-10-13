@@ -1,0 +1,29 @@
+# Python virtual environments
+.venv/
+venv/
+
+# Python cache and tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets and local environment variables
+.env
+.env.*
+!.env.example
+
+# Local editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Generated vector databases and caches
+chroma_db/
+.cache/
+
+# Large or private source documents
+data/*.pdf
+
