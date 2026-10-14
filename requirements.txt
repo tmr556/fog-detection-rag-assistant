@@ -2,6 +2,6 @@ pymupdf
 chromadb
 sentence-transformers
 streamlit
-openai
+ollama
 python-dotenv
 
