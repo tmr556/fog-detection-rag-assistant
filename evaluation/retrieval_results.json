@@ -1,0 +1,667 @@
+{
+  "model": "BAAI/bge-small-zh-v1.5",
+  "collection": "fog_detection_report",
+  "top_k": 5,
+  "metrics": {
+    "answerable_questions": 15,
+    "hit_at_1": 0.5333,
+    "hit_at_3": 1.0,
+    "hit_at_5": 1.0,
+    "mrr_at_5": 0.7556
+  },
+  "answerability_analysis": {
+    "positive_min": 0.5512,
+    "positive_mean": 0.6885,
+    "positive_max": 0.7978,
+    "negative_min": 0.3788,
+    "negative_mean": 0.467,
+    "negative_max": 0.519,
+    "suggested_threshold": 0.5351
+  },
+  "details": [
+    {
+      "id": "q01",
+      "question": "普通YOLOv8n在雾天数据上的主要问题是什么？",
+      "category": "baseline",
+      "answerable": true,
+      "expected_pages": [
+        4,
+        6,
+        7,
+        23,
+        26,
+        27,
+        28
+      ],
+      "retrieved_pages": [
+        4,
+        7,
+        24,
+        11,
+        23
+      ],
+      "retrieved_chunk_ids": [
+        "p0004_c001",
+        "p0007_c001",
+        "p0024_c003",
+        "p0011_c003",
+        "p0023_c001"
+      ],
+      "similarities": [
+        0.6513,
+        0.6328,
+        0.6276,
+        0.6219,
+        0.6174
+      ],
+      "top_similarity": 0.6513,
+      "first_relevant_rank": 1
+    },
+    {
+      "id": "q02",
+      "question": "项目采用了哪三条雾天目标检测改进路线？",
+      "category": "overview",
+      "answerable": true,
+      "expected_pages": [
+        7,
+        8,
+        9,
+        12,
+        13
+      ],
+      "retrieved_pages": [
+        13,
+        6,
+        11,
+        112,
+        6
+      ],
+      "retrieved_chunk_ids": [
+        "p0013_c001",
+        "p0006_c001",
+        "p0011_c003",
+        "p0112_c001",
+        "p0006_c002"
+      ],
+      "similarities": [
+        0.6938,
+        0.6673,
+        0.6657,
+        0.6618,
+        0.6583
+      ],
+      "top_similarity": 0.6938,
+      "first_relevant_rank": 1
+    },
+    {
+      "id": "q03",
+      "question": "大气散射模型如何描述雾图的生成过程？",
+      "category": "theory",
+      "answerable": true,
+      "expected_pages": [
+        10
+      ],
+      "retrieved_pages": [
+        10,
+        15,
+        15,
+        16,
+        70
+      ],
+      "retrieved_chunk_ids": [
+        "p0010_c001",
+        "p0015_c003",
+        "p0015_c002",
+        "p0016_c002",
+        "p0070_c003"
+      ],
+      "similarities": [
+        0.7671,
+        0.6882,
+        0.6852,
+        0.6279,
+        0.6135
+      ],
+      "top_similarity": 0.7671,
+      "first_relevant_rank": 1
+    },
+    {
+      "id": "q04",
+      "question": "VOC_hazy_5beta数据集为什么要使用五种雾浓度？",
+      "category": "dataset",
+      "answerable": true,
+      "expected_pages": [
+        16,
+        17
+      ],
+      "retrieved_pages": [
+        8,
+        103,
+        16,
+        14,
+        16
+      ],
+      "retrieved_chunk_ids": [
+        "p0008_c002",
+        "p0103_c003",
+        "p0016_c002",
+        "p0014_c001",
+        "p0016_c001"
+      ],
+      "similarities": [
+        0.7343,
+        0.6863,
+        0.6771,
+        0.671,
+        0.6646
+      ],
+      "top_similarity": 0.7343,
+      "first_relevant_rank": 3
+    },
+    {
+      "id": "q05",
+      "question": "AOD-Net接入检测器后为什么要冻结部分检测主干？",
+      "category": "aod_net",
+      "answerable": true,
+      "expected_pages": [
+        37,
+        38,
+        39
+      ],
+      "retrieved_pages": [
+        37,
+        38,
+        37,
+        50,
+        29
+      ],
+      "retrieved_chunk_ids": [
+        "p0037_c001",
+        "p0038_c001",
+        "p0037_c002",
+        "p0050_c001",
+        "p0029_c003"
+      ],
+      "similarities": [
+        0.6955,
+        0.6825,
+        0.6659,
+        0.6242,
+        0.6217
+      ],
+      "top_similarity": 0.6955,
+      "first_relevant_rank": 1
+    },
+    {
+      "id": "q06",
+      "question": "AOD-Net前置去雾路线最终得到的主要经验是什么？",
+      "category": "aod_net",
+      "answerable": true,
+      "expected_pages": [
+        50,
+        51,
+        52
+      ],
+      "retrieved_pages": [
+        29,
+        50,
+        29,
+        30,
+        11
+      ],
+      "retrieved_chunk_ids": [
+        "p0029_c001",
+        "p0050_c002",
+        "p0029_c002",
+        "p0030_c002",
+        "p0011_c003"
+      ],
+      "similarities": [
+        0.7883,
+        0.763,
+        0.753,
+        0.7506,
+        0.7458
+      ],
+      "top_similarity": 0.7883,
+      "first_relevant_rank": 2
+    },
+    {
+      "id": "q07",
+      "question": "YOLOv8-Dehaze V1的作用和局限性是什么？",
+      "category": "dehaze_multitask",
+      "answerable": true,
+      "expected_pages": [
+        53,
+        54,
+        61
+      ],
+      "retrieved_pages": [
+        84,
+        53,
+        54,
+        52,
+        56
+      ],
+      "retrieved_chunk_ids": [
+        "p0084_c001",
+        "p0053_c002",
+        "p0054_c001",
+        "p0052_c001",
+        "p0056_c001"
+      ],
+      "similarities": [
+        0.5512,
+        0.5397,
+        0.5321,
+        0.5286,
+        0.5273
+      ],
+      "top_similarity": 0.5512,
+      "first_relevant_rank": 2
+    },
+    {
+      "id": "q08",
+      "question": "V2相比V1最关键的结构改进是什么？",
+      "category": "dehaze_multitask",
+      "answerable": true,
+      "expected_pages": [
+        62,
+        63,
+        64,
+        67,
+        68,
+        69
+      ],
+      "retrieved_pages": [
+        69,
+        74,
+        70,
+        64,
+        65
+      ],
+      "retrieved_chunk_ids": [
+        "p0069_c001",
+        "p0074_c002",
+        "p0070_c001",
+        "p0064_c001",
+        "p0065_c001"
+      ],
+      "similarities": [
+        0.5985,
+        0.5946,
+        0.593,
+        0.5917,
+        0.5832
+      ],
+      "top_similarity": 0.5985,
+      "first_relevant_rank": 1
+    },
+    {
+      "id": "q09",
+      "question": "V3C为什么提高了去雾质量却没有超过V2的检测指标？",
+      "category": "dehaze_multitask",
+      "answerable": true,
+      "expected_pages": [
+        72,
+        73,
+        74,
+        76,
+        77
+      ],
+      "retrieved_pages": [
+        69,
+        74,
+        70,
+        12,
+        69
+      ],
+      "retrieved_chunk_ids": [
+        "p0069_c003",
+        "p0074_c001",
+        "p0070_c001",
+        "p0012_c003",
+        "p0069_c001"
+      ],
+      "similarities": [
+        0.7978,
+        0.7804,
+        0.774,
+        0.7732,
+        0.7504
+      ],
+      "top_similarity": 0.7978,
+      "first_relevant_rank": 2
+    },
+    {
+      "id": "q10",
+      "question": "RecoveryBranch Aux-only实验的目的和局限性是什么？",
+      "category": "feature_fusion",
+      "answerable": true,
+      "expected_pages": [
+        82,
+        83,
+        84,
+        86
+      ],
+      "retrieved_pages": [
+        85,
+        83,
+        82,
+        101,
+        84
+      ],
+      "retrieved_chunk_ids": [
+        "p0085_c001",
+        "p0083_c001",
+        "p0082_c001",
+        "p0101_c002",
+        "p0084_c001"
+      ],
+      "similarities": [
+        0.5947,
+        0.5938,
+        0.5868,
+        0.5838,
+        0.576
+      ],
+      "top_similarity": 0.5947,
+      "first_relevant_rank": 2
+    },
+    {
+      "id": "q11",
+      "question": "P3-fixed为什么要进一步改成AFFM-lite？",
+      "category": "feature_fusion",
+      "answerable": true,
+      "expected_pages": [
+        87,
+        90,
+        91,
+        94
+      ],
+      "retrieved_pages": [
+        96,
+        94,
+        101,
+        94,
+        80
+      ],
+      "retrieved_chunk_ids": [
+        "p0096_c003",
+        "p0094_c001",
+        "p0101_c001",
+        "p0094_c002",
+        "p0080_c003"
+      ],
+      "similarities": [
+        0.7108,
+        0.7027,
+        0.6941,
+        0.6873,
+        0.6572
+      ],
+      "top_similarity": 0.7108,
+      "first_relevant_rank": 2
+    },
+    {
+      "id": "q12",
+      "question": "AFFM-lite为什么提高Recall却降低Precision？",
+      "category": "feature_fusion",
+      "answerable": true,
+      "expected_pages": [
+        96,
+        98,
+        101,
+        102
+      ],
+      "retrieved_pages": [
+        98,
+        98,
+        6,
+        96,
+        101
+      ],
+      "retrieved_chunk_ids": [
+        "p0098_c001",
+        "p0098_c002",
+        "p0006_c003",
+        "p0096_c003",
+        "p0101_c001"
+      ],
+      "similarities": [
+        0.7337,
+        0.7275,
+        0.6904,
+        0.6892,
+        0.6581
+      ],
+      "top_similarity": 0.7337,
+      "first_relevant_rank": 1
+    },
+    {
+      "id": "q13",
+      "question": "RTTS zero-shot实验采用了什么设置？",
+      "category": "real_fog",
+      "answerable": true,
+      "expected_pages": [
+        103
+      ],
+      "retrieved_pages": [
+        103,
+        104,
+        103,
+        22,
+        114
+      ],
+      "retrieved_chunk_ids": [
+        "p0103_c001",
+        "p0104_c001",
+        "p0103_c002",
+        "p0022_c004",
+        "p0114_c002"
+      ],
+      "similarities": [
+        0.5945,
+        0.5721,
+        0.5639,
+        0.5633,
+        0.5625
+      ],
+      "top_similarity": 0.5945,
+      "first_relevant_rank": 1
+    },
+    {
+      "id": "q14",
+      "question": "哪个模型在RTTS真实雾数据集上表现最好？",
+      "category": "real_fog",
+      "answerable": true,
+      "expected_pages": [
+        105,
+        106,
+        109,
+        110,
+        111,
+        113
+      ],
+      "retrieved_pages": [
+        103,
+        109,
+        22,
+        113,
+        106
+      ],
+      "retrieved_chunk_ids": [
+        "p0103_c001",
+        "p0109_c001",
+        "p0022_c004",
+        "p0113_c002",
+        "p0106_c001"
+      ],
+      "similarities": [
+        0.6883,
+        0.6765,
+        0.6702,
+        0.6693,
+        0.6665
+      ],
+      "top_similarity": 0.6883,
+      "first_relevant_rank": 2
+    },
+    {
+      "id": "q15",
+      "question": "为什么合成雾数据上的提升不能稳定迁移到真实雾数据？",
+      "category": "domain_gap",
+      "answerable": true,
+      "expected_pages": [
+        103,
+        109,
+        110,
+        113,
+        114
+      ],
+      "retrieved_pages": [
+        109,
+        105,
+        15,
+        110,
+        22
+      ],
+      "retrieved_chunk_ids": [
+        "p0109_c001",
+        "p0105_c002",
+        "p0015_c003",
+        "p0110_c002",
+        "p0022_c004"
+      ],
+      "similarities": [
+        0.7275,
+        0.7022,
+        0.6823,
+        0.6815,
+        0.6813
+      ],
+      "top_similarity": 0.7275,
+      "first_relevant_rank": 1
+    },
+    {
+      "id": "n01",
+      "question": "三相逆变器的SPWM调制原理是什么？",
+      "category": "out_of_domain",
+      "answerable": false,
+      "expected_pages": [],
+      "retrieved_pages": [
+        94,
+        82,
+        82,
+        80,
+        84
+      ],
+      "retrieved_chunk_ids": [
+        "p0094_c002",
+        "p0082_c002",
+        "p0082_c001",
+        "p0080_c003",
+        "p0084_c001"
+      ],
+      "similarities": [
+        0.519,
+        0.5068,
+        0.5011,
+        0.4959,
+        0.4956
+      ],
+      "top_similarity": 0.519,
+      "first_relevant_rank": null
+    },
+    {
+      "id": "n02",
+      "question": "Transformer中的多头注意力如何计算？",
+      "category": "out_of_domain",
+      "answerable": false,
+      "expected_pages": [],
+      "retrieved_pages": [
+        10,
+        56,
+        35,
+        6,
+        39
+      ],
+      "retrieved_chunk_ids": [
+        "p0010_c003",
+        "p0056_c003",
+        "p0035_c001",
+        "p0006_c003",
+        "p0039_c001"
+      ],
+      "similarities": [
+        0.5074,
+        0.4948,
+        0.4932,
+        0.4915,
+        0.4874
+      ],
+      "top_similarity": 0.5074,
+      "first_relevant_rank": null
+    },
+    {
+      "id": "n03",
+      "question": "武汉明天的天气怎么样？",
+      "category": "out_of_domain",
+      "answerable": false,
+      "expected_pages": [],
+      "retrieved_pages": [
+        114,
+        19,
+        52,
+        83,
+        116
+      ],
+      "retrieved_chunk_ids": [
+        "p0114_c001",
+        "p0019_c002",
+        "p0052_c002",
+        "p0083_c003",
+        "p0116_c002"
+      ],
+      "similarities": [
+        0.3788,
+        0.3553,
+        0.3519,
+        0.35,
+        0.3318
+      ],
+      "top_similarity": 0.3788,
+      "first_relevant_rank": null
+    },
+    {
+      "id": "n04",
+      "question": "如何使用动态规划解决旅行商问题？",
+      "category": "out_of_domain",
+      "answerable": false,
+      "expected_pages": [],
+      "retrieved_pages": [
+        22,
+        79,
+        114,
+        52,
+        110
+      ],
+      "retrieved_chunk_ids": [
+        "p0022_c004",
+        "p0079_c004",
+        "p0114_c002",
+        "p0052_c002",
+        "p0110_c003"
+      ],
+      "similarities": [
+        0.4629,
+        0.4224,
+        0.4186,
+        0.4177,
+        0.3982
+      ],
+      "top_similarity": 0.4629,
+      "first_relevant_rank": null
+    }
+  ]
+}

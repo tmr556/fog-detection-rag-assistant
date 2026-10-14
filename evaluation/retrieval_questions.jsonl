@@ -1,0 +1,19 @@
+{"id":"q01","question":"普通YOLOv8n在雾天数据上的主要问题是什么？","answerable":true,"expected_pages":[4,6,7,23,26,27,28],"category":"baseline"}
+{"id":"q02","question":"项目采用了哪三条雾天目标检测改进路线？","answerable":true,"expected_pages":[7,8,9,12,13],"category":"overview"}
+{"id":"q03","question":"大气散射模型如何描述雾图的生成过程？","answerable":true,"expected_pages":[10],"category":"theory"}
+{"id":"q04","question":"VOC_hazy_5beta数据集为什么要使用五种雾浓度？","answerable":true,"expected_pages":[16,17],"category":"dataset"}
+{"id":"q05","question":"AOD-Net接入检测器后为什么要冻结部分检测主干？","answerable":true,"expected_pages":[37,38,39],"category":"aod_net"}
+{"id":"q06","question":"AOD-Net前置去雾路线最终得到的主要经验是什么？","answerable":true,"expected_pages":[50,51,52],"category":"aod_net"}
+{"id":"q07","question":"YOLOv8-Dehaze V1的作用和局限性是什么？","answerable":true,"expected_pages":[53,54,61],"category":"dehaze_multitask"}
+{"id":"q08","question":"V2相比V1最关键的结构改进是什么？","answerable":true,"expected_pages":[62,63,64,67,68,69],"category":"dehaze_multitask"}
+{"id":"q09","question":"V3C为什么提高了去雾质量却没有超过V2的检测指标？","answerable":true,"expected_pages":[72,73,74,76,77],"category":"dehaze_multitask"}
+{"id":"q10","question":"RecoveryBranch Aux-only实验的目的和局限性是什么？","answerable":true,"expected_pages":[82,83,84,86],"category":"feature_fusion"}
+{"id":"q11","question":"P3-fixed为什么要进一步改成AFFM-lite？","answerable":true,"expected_pages":[87,90,91,94],"category":"feature_fusion"}
+{"id":"q12","question":"AFFM-lite为什么提高Recall却降低Precision？","answerable":true,"expected_pages":[96,98,101,102],"category":"feature_fusion"}
+{"id":"q13","question":"RTTS zero-shot实验采用了什么设置？","answerable":true,"expected_pages":[103],"category":"real_fog"}
+{"id":"q14","question":"哪个模型在RTTS真实雾数据集上表现最好？","answerable":true,"expected_pages":[105,106,109,110,111,113],"category":"real_fog"}
+{"id":"q15","question":"为什么合成雾数据上的提升不能稳定迁移到真实雾数据？","answerable":true,"expected_pages":[103,109,110,113,114],"category":"domain_gap"}
+{"id":"n01","question":"三相逆变器的SPWM调制原理是什么？","answerable":false,"expected_pages":[],"category":"out_of_domain"}
+{"id":"n02","question":"Transformer中的多头注意力如何计算？","answerable":false,"expected_pages":[],"category":"out_of_domain"}
+{"id":"n03","question":"武汉明天的天气怎么样？","answerable":false,"expected_pages":[],"category":"out_of_domain"}
+{"id":"n04","question":"如何使用动态规划解决旅行商问题？","answerable":false,"expected_pages":[],"category":"out_of_domain"}
