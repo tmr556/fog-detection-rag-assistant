@@ -1,4 +1,5 @@
 import argparse
+from functools import lru_cache
 from pathlib import Path
 
 import chromadb
@@ -16,6 +17,63 @@ QUERY_INSTRUCTION = (
 )
 
 
+def expand_query(query: str) -> str:
+    """为过于宽泛的报告指代问题补充领域上下文。"""
+
+    normalized_query = query.strip()
+    report_references = (
+        "文中",
+        "本文",
+        "报告",
+        "项目",
+        "课题",
+        "雾天检测",
+    )
+
+    is_short_report_question = (
+        len(normalized_query) <= 18
+        and any(
+            reference in normalized_query
+            for reference in report_references
+        )
+    )
+
+    if (
+        is_short_report_question
+        and "数据" in normalized_query
+    ):
+        return (
+            "雾天目标检测课程报告使用了哪些训练数据集、"
+            "验证数据集和真实雾测试数据集？"
+            f"原问题：{normalized_query}"
+        )
+
+    overview_phrases = (
+        "做什么",
+        "研究什么",
+        "主要内容",
+        "介绍一下",
+        "是什么",
+    )
+
+    if (
+        is_short_report_question
+        and any(
+            phrase in normalized_query
+            for phrase in overview_phrases
+        )
+    ):
+        return (
+            "雾天目标检测课程报告研究什么问题，"
+            "采用了哪些模型路线、数据集和实验方法，"
+            "主要结论是什么？"
+            f"原问题：{normalized_query}"
+        )
+
+    return normalized_query
+
+
+@lru_cache(maxsize=1)
 def load_model() -> SentenceTransformer:
     """加载与文档索引相同的Embedding模型。"""
 
@@ -27,6 +85,7 @@ def load_model() -> SentenceTransformer:
     )
 
 
+@lru_cache(maxsize=1)
 def load_collection():
     """连接本地ChromaDB并读取报告集合。"""
 
@@ -59,16 +118,26 @@ def search(
     model = load_model()
     collection = load_collection()
 
-    instructed_query = QUERY_INSTRUCTION + query.strip()
+    original_query = query.strip()
+    expanded_query = expand_query(original_query)
+    retrieval_queries = [original_query]
 
-    query_embedding = model.encode(
-        instructed_query,
+    if expanded_query != original_query:
+        retrieval_queries.append(expanded_query)
+
+    instructed_queries = [
+        QUERY_INSTRUCTION + retrieval_query
+        for retrieval_query in retrieval_queries
+    ]
+
+    query_embeddings = model.encode(
+        instructed_queries,
         convert_to_numpy=True,
         normalize_embeddings=True,
     )
 
     result = collection.query(
-        query_embeddings=[query_embedding.tolist()],
+        query_embeddings=query_embeddings.tolist(),
         n_results=top_k,
         include=[
             "documents",
@@ -77,35 +146,78 @@ def search(
         ],
     )
 
+    chunks_by_id = {}
+
+    for (
+        ids,
+        documents,
+        metadatas,
+        distances,
+    ) in zip(
+        result["ids"],
+        result["documents"],
+        result["metadatas"],
+        result["distances"],
+    ):
+        for result_rank, (
+            chunk_id,
+            document,
+            metadata,
+            distance,
+        ) in enumerate(
+            zip(
+                ids,
+                documents,
+                metadatas,
+                distances,
+            ),
+            start=1,
+        ):
+            existing_chunk = chunks_by_id.get(chunk_id)
+
+            if existing_chunk is None:
+                chunks_by_id[chunk_id] = {
+                    "chunk_id": chunk_id,
+                    "page_number": metadata["page_number"],
+                    "distance": distance,
+                    "similarity": 1 - distance,
+                    "text": document,
+                    "rrf_score": 0.0,
+                }
+                existing_chunk = chunks_by_id[chunk_id]
+
+            existing_chunk["rrf_score"] += (
+                1 / (60 + result_rank)
+            )
+
+            if distance < existing_chunk["distance"]:
+                existing_chunk.update(
+                    {
+                        "page_number": metadata["page_number"],
+                        "distance": distance,
+                        "similarity": 1 - distance,
+                        "text": document,
+                    }
+                )
+
+    ranked_chunks = sorted(
+        chunks_by_id.values(),
+        key=lambda item: (
+            -item["rrf_score"],
+            item["distance"],
+        ),
+    )[:top_k]
+
     retrieved_chunks = []
 
-    ids = result["ids"][0]
-    documents = result["documents"][0]
-    metadatas = result["metadatas"][0]
-    distances = result["distances"][0]
-
-    for rank, (
-        chunk_id,
-        document,
-        metadata,
-        distance,
-    ) in enumerate(
-        zip(
-            ids,
-            documents,
-            metadatas,
-            distances,
-        ),
+    for rank, chunk in enumerate(
+        ranked_chunks,
         start=1,
     ):
         retrieved_chunks.append(
             {
                 "rank": rank,
-                "chunk_id": chunk_id,
-                "page_number": metadata["page_number"],
-                "distance": distance,
-                "similarity": 1 - distance,
-                "text": document,
+                **chunk,
             }
         )
 

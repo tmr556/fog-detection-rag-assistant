@@ -1,11 +1,15 @@
 import argparse
 import os
+import re
 from pathlib import Path
 
 from dotenv import load_dotenv
 from ollama import Client
 
-from search import search
+try:
+    from .search import search
+except ImportError:
+    from search import search
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -84,6 +88,38 @@ def build_context(results: list[dict]) -> str:
     return "\n\n".join(context_parts)
 
 
+def sanitize_citations(
+    answer: str,
+    results: list[dict],
+) -> tuple[str, list[int]]:
+    """移除不属于本次检索结果的PDF页码引用。"""
+
+    valid_pages = {
+        int(result["page_number"])
+        for result in results
+    }
+    invalid_pages = set()
+    citation_pattern = re.compile(
+        r"\[PDF第(\d+)页\]"
+    )
+
+    def replace_citation(match: re.Match) -> str:
+        page_number = int(match.group(1))
+
+        if page_number in valid_pages:
+            return match.group(0)
+
+        invalid_pages.add(page_number)
+        return ""
+
+    sanitized_answer = citation_pattern.sub(
+        replace_citation,
+        answer,
+    )
+
+    return sanitized_answer.strip(), sorted(invalid_pages)
+
+
 def generate_answer(
     question: str,
     context: str,
@@ -150,51 +186,58 @@ def print_sources(results: list[dict]) -> None:
         )
 
 
-def answer_question(question: str) -> None:
-    """执行一次完整的RAG问答。"""
+def run_rag(question: str) -> dict:
+    """执行RAG问答并返回供命令行或网页使用的结构化结果。"""
+
+    question = question.strip()
+
+    if not question:
+        raise ValueError("问题不能为空")
 
     config = get_config()
-
-    print(f"\n问题：{question}")
-    print(f"检索数量：Top {config['top_k']}")
-    print(
-        "拒答阈值："
-        f"{config['similarity_threshold']:.4f}"
-    )
-
     results = search(
         query=question,
         top_k=config["top_k"],
     )
 
+    common_result = {
+        "question": question,
+        "model": config["model"],
+        "top_k": config["top_k"],
+        "threshold": config["similarity_threshold"],
+        "results": results,
+    }
+
     if not results:
-        print("\n回答：知识库没有返回任何检索结果。")
-        return
+        return {
+            **common_result,
+            "status": "empty",
+            "top_similarity": None,
+            "answer": "知识库没有返回任何检索结果。",
+            "invalid_citation_pages": [],
+        }
 
-    top_similarity = results[0]["similarity"]
+    top_similarity = max(
+        result["similarity"]
+        for result in results
+    )
 
-    print(f"最高相似度：{top_similarity:.4f}")
-
-    if (
-        top_similarity
-        < config["similarity_threshold"]
-    ):
-        print(
-            "\n回答：这个问题超出了当前课程报告的"
-            "知识范围，我无法根据报告内容作答。"
-        )
-        print_sources(results)
-        return
+    if top_similarity < config["similarity_threshold"]:
+        return {
+            **common_result,
+            "status": "rejected",
+            "top_similarity": top_similarity,
+            "answer": (
+                "这个问题超出了当前课程报告的知识范围，"
+                "我无法根据报告内容作答。"
+            ),
+            "invalid_citation_pages": [],
+        }
 
     context = build_context(results)
 
-    print(
-        f"\n正在调用本地模型："
-        f"{config['model']}"
-    )
-
     try:
-        answer = generate_answer(
+        generated_answer = generate_answer(
             question=question,
             context=context,
             config=config,
@@ -207,13 +250,54 @@ def answer_question(question: str) -> None:
             f"并且已经下载模型{config['model']}。"
         ) from error
 
+    answer, invalid_citation_pages = sanitize_citations(
+        answer=generated_answer,
+        results=results,
+    )
 
+    return {
+        **common_result,
+        "status": "answered",
+        "top_similarity": top_similarity,
+        "answer": answer,
+        "invalid_citation_pages": invalid_citation_pages,
+    }
+
+
+def answer_question(question: str) -> None:
+    """执行一次完整的RAG问答并输出到终端。"""
+
+    print(f"\n问题：{question}")
+
+    result = run_rag(question)
+
+    print(f"检索数量：Top {result['top_k']}")
+    print(f"拒答阈值：{result['threshold']:.4f}")
+
+    if result["top_similarity"] is not None:
+        print(
+            "最高相似度："
+            f"{result['top_similarity']:.4f}"
+        )
+
+    if result["status"] == "answered":
+        print(f"使用本地模型：{result['model']}")
 
     print("\n回答")
     print("=" * 70)
-    print(answer)
+    print(result["answer"])
 
-    print_sources(results)
+    if result["invalid_citation_pages"]:
+        invalid_pages = ", ".join(
+            str(page)
+            for page in result["invalid_citation_pages"]
+        )
+        print(
+            "\n引用校验：已移除不在检索结果中的页码："
+            f"{invalid_pages}"
+        )
+
+    print_sources(result["results"])
 
 
 def parse_arguments():
