@@ -26,4 +26,5 @@ chroma_db/
 
 # Large or private source documents
 data/*.pdf
-
+# Extracted text generated from private reports
+data/processed/*.jsonl
